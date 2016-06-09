@@ -54,4 +54,4 @@ if __name__ == '__main__':
         totalfiles += userfiles
         print("DONE! ... with " + user + ". User files deleted: " + str(userfiles) + ". Total files deleted: " + str(totalfiles) + ".")
         if len(userfailures) > 0:
-            print("We had problems deleting files for some users: " + userfailures.split(", ") + ".")
+            print("We had problems deleting files for some users: " + "; ".join(map(str, userfailures)) + ".")
