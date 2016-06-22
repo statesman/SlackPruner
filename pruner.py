@@ -29,7 +29,7 @@ if __name__ == '__main__':
             files_list_url = 'https://slack.com/api/files.list'
             date = str(calendar.timegm((datetime.now() + timedelta(daystoretain * -1)).utctimetuple()))
             data = {"token": _token, "ts_to": date}
-            response = requests.post(files_list_url, data = data)
+            response = requests.post(files_list_url, data=data)
             if len(response.json()["files"]) == 0:
                 done = True
                 break
@@ -39,15 +39,16 @@ if __name__ == '__main__':
                 if firstfile == f["id"] and userfiles > 0:   # If this isn't our first pass through
                     print("We have problems deleting files for " + user + ". User may need admin access.")
                     userfailures.append(user)
+                    userfiles = 0   # If we had one error, we probably didn't delete any files for the user
                     done = True
                     break
                 print("\tDeleting " + user + "'s file " + f["name"].encode("utf-8") + "...")
                 timestamp = str(calendar.timegm(datetime.now().utctimetuple()))
                 delete_url = "https://" + _domain + ".slack.com/api/files.delete?t=" + timestamp
-                requests.post(delete_url, data = {
-                    "token": _token, 
-                    "file": f["id"], 
-                    "set_active": "true", 
+                requests.post(delete_url, data={
+                    "token": _token,
+                    "file": f["id"],
+                    "set_active": "true",
                     "_attempts": "1"})
                 userfiles += 1
 
