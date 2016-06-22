@@ -17,6 +17,7 @@ if apikeys[0][1] == "xoxp-1234567890-1234567890-1234567890-1234567890":
 
 if __name__ == '__main__':
     totalfiles = 0
+    userfailures = []
     for apikey in apikeys:
         userfiles = 0
         user = apikey[0]
@@ -24,7 +25,6 @@ if __name__ == '__main__':
         print("Beginning to work on files of " + user)
         firstfile = "ireallyhateslackrightnow"
         done = False
-        userfailures = []
         while not done:
             files_list_url = 'https://slack.com/api/files.list'
             date = str(calendar.timegm((datetime.now() + timedelta(daystoretain * -1)).utctimetuple()))
@@ -53,5 +53,6 @@ if __name__ == '__main__':
 
         totalfiles += userfiles
         print("DONE! ... with " + user + ". User files deleted: " + str(userfiles) + ". Total files deleted: " + str(totalfiles) + ".")
-        if len(userfailures) > 0:
-            print("We had problems deleting files for some users: " + "; ".join(map(str, userfailures)) + ".")
+    print(str(totalfiles) + " files may have been deleted.")
+    if len(userfailures) > 0:
+            print("\nWe had problems deleting files for some users: " + "; ".join(map(str, userfailures)) + ".")
