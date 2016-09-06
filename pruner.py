@@ -23,7 +23,7 @@ if __name__ == '__main__':
         user = apikey[0]
         _token = apikey[1]
         print("Beginning to work on files of " + user)
-        firstfile = "ireallyhateslackrightnow"
+        processedfiles = []
         done = False
         while not done:
             files_list_url = 'https://slack.com/api/files.list'
@@ -34,14 +34,13 @@ if __name__ == '__main__':
                 done = True
                 break
             for f in response.json()["files"]:
-                if firstfile == "ireallyhateslackrightnow":
-                    firstfile = f["id"]
-                if firstfile == f["id"] and userfiles > 0:   # If this isn't our first pass through
+                if f["id"] in processedfiles:   # If this isn't our first pass through
                     print("We have problems deleting files for " + user + ". User may need admin access.")
                     userfailures.append(user)
                     userfiles = 0   # If we had one error, we probably didn't delete any files for the user
                     done = True
                     break
+                processedfiles.append(f["id"])
                 print("\tDeleting " + user + "'s file " + f["name"].encode("utf-8") + "...")
                 timestamp = str(calendar.timegm(datetime.now().utctimetuple()))
                 delete_url = "https://" + _domain + ".slack.com/api/files.delete?t=" + timestamp
