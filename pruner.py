@@ -18,6 +18,7 @@ if apikeys[0][1] == "xoxp-1234567890-1234567890-1234567890-1234567890":
 if __name__ == '__main__':
     totalfiles = 0
     userfailures = []
+    sizedeleted = 0
     for apikey in apikeys:
         userfiles = 0
         user = apikey[0]
@@ -44,15 +45,20 @@ if __name__ == '__main__':
                 print("\tDeleting " + user + "'s file " + f["name"].encode("utf-8") + "...")
                 timestamp = str(calendar.timegm(datetime.now().utctimetuple()))
                 delete_url = "https://" + _domain + ".slack.com/api/files.delete?t=" + timestamp
-                requests.post(delete_url, data={
+                deleteresponse = requests.post(delete_url, data={
                     "token": _token,
                     "file": f["id"],
                     "set_active": "true",
                     "_attempts": "1"})
-                userfiles += 1
+                if deleteresponse.json()["ok"]: # If we get ok: True
+                    userfiles += 1
+                    sizedeleted += f["size"]
+                else:
+                    print("\t\tError found: " + deleteresponse.json()["error"])
 
         totalfiles += userfiles
         print("DONE! ... with " + user + ". User files deleted: " + str(userfiles) + ". Total files deleted: " + str(totalfiles) + ".")
     print(str(totalfiles) + " files may have been deleted.")
+    print(str(sizedeleted) + " bytes may have been freed up.")
     if len(userfailures) > 0:
             print("\nWe had problems deleting files for some users: " + "; ".join(map(str, userfailures)) + ".")
