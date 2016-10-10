@@ -59,6 +59,6 @@ if __name__ == '__main__':
         totalfiles += userfiles
         print("DONE! ... with " + user + ". User files deleted: " + str(userfiles) + ". Total files deleted: " + str(totalfiles) + ".")
     print(str(totalfiles) + " files may have been deleted.")
-    print(str(sizedeleted) + " bytes may have been freed up.")
+    print("{:,}".format(sizedeleted) + " bytes may have been freed up.")
     if len(userfailures) > 0:
             print("\nWe had problems deleting files for some users: " + "; ".join(map(str, userfailures)) + ".")
