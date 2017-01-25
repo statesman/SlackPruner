@@ -58,7 +58,13 @@ if __name__ == '__main__':
                     done = True
                     break
                 processedfiles.append(f["id"])
-                print("\tDeleting " + user + "'s file " + f["name"].encode("utf-8") + "...")
+                # print("\tDeleting " + user + "'s file " + f["name"].encode("utf-8") + "...")
+                # print(str(f["name"]))
+                print("\tDeleting " + user + "'s file " + str(f["name"]) + " ...")
+# Traceback (most recent call last):
+#  File "C:\data\SlackPruner\pruner.py", line 61, in <module>
+#    print(("\tDeleting " + user + "'s file " + f["name"].encode("utf-8") + "...").encode("utf-8"))
+# TypeError: must be str, not bytes
                 timestamp = str(calendar.timegm(datetime.now().utctimetuple()))
                 delete_url = baseurl + "files.delete?t=" + timestamp
                 delete_data = {
